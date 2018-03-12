@@ -1,6 +1,7 @@
 package Test;
 
 import com.smart.reflect.PrivateCar;
+import org.springframework.core.io.Resource;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -36,6 +37,7 @@ public class PrivateCarReflect {
         drive.setAccessible(Boolean.TRUE);
         //通过方法反射类调用方法
         drive.invoke(privateCar,"red");
+
 
 
     }
