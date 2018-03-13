@@ -36,4 +36,3 @@ public class FileSourceExample {
         return new PathResource(str);
     }
 }
-7
