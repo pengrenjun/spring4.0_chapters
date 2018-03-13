@@ -170,6 +170,10 @@ public class XhContractExecution  extends GenericEntity  {
         return xhContractExecutionDetailSet;
     }
 
+    public void getContractInfo(){
+        System.out.println("合同编号："+this.contractNumber+"合同类型:"+this.contractType);
+    }
+
     public String getMainPkId() {
         return mainPkId;
     }
