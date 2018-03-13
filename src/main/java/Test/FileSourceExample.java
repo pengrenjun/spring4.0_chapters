@@ -48,40 +48,47 @@ public class FileSourceExample {
     }
 
     /*获取特殊编码风格的文件内容信息(通过EncodeResource对Resource进行资源编码处理)*/
-    private static String getFileContent(Resource resourceToEncode,String codeStyle) throws IOException {
+    public static String getFileContent(Resource resourceToEncode,String codeStyle) throws IOException {
        return  FileCopyUtils.copyToString(getEncodeResource(resourceToEncode,codeStyle).getReader());
     }
 
     /*通过Resource获取特殊编码的EncodeResource*/
-    private static EncodedResource getEncodeResource(Resource resourceToEncode,String codeStyle) {
+    public static EncodedResource getEncodeResource(Resource resourceToEncode,String codeStyle) {
         return  new EncodedResource(resourceToEncode,codeStyle);
     }
 
     /*通过resource获取File对象*/
-    private static File getFileByResoure(Resource resource) throws IOException {
+    public static File getFileByResoure(Resource resource) throws IOException {
         return resource.getFile();
     }
 
     /*通过Resource接口读取文件资源*/
-    private static String ReadResourceTest(String path) throws IOException {
+    public static String ReadResourceTest(String path) throws IOException {
         Resource resource=getPathResource(path);
         InputStream inputStream=resource.getInputStream();
+       return getContentByInputStream(inputStream);
+
+
+    }
+
+    /*根据输入流读取文件信息内容*/
+    public static String  getContentByInputStream(InputStream inputStream) throws IOException {
         //ByteArrayOutputStream他的作用就是把字节流转成字符
         ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream();
         int i;
         while ((i=inputStream.read())!=-1){
-            System.out.print(i+" ");
             byteArrayOutputStream.write(i);
         }
         inputStream.close();
         byteArrayOutputStream.close();
 
         return byteArrayOutputStream.toString();
-
     }
 
+
+
     //使用WritableResource接口向系统所在文件中写资源(filePath为系统绝对路径)
-     private static void WritableResourceTest(String filePath) throws IOException {
+    public static void WritableResourceTest(String filePath) throws IOException {
         WritableResource writableResource=(WritableResource)getPathResource(filePath);
 
          OutputStream outputStream=  getOutputStream(writableResource);
@@ -92,20 +99,20 @@ public class FileSourceExample {
 
 
     /*通过WritableResource获取相应的输出流FileOutputStream*/
-    private static OutputStream getOutputStream(WritableResource writableResource) throws IOException {
+    public static OutputStream getOutputStream(WritableResource writableResource) throws IOException {
         //writableResource完成写资源操作,实际调用的是jdk的outputStream
         return  writableResource.getOutputStream();
     }
 
-    private static Resource getClassResouce(String str) {
+    public static Resource getClassResouce(String str) {
         return  new ClassPathResource(str);
     }
 
-    private  static Resource getPathResource(String str){
+    public  static Resource getPathResource(String str){
         return new PathResource(str);
     }
     //获取类加载的根路径(系统跟路径)
-    private static String getFileRootPath(Class<?> cls){
+    public static String getFileRootPath(Class<?> cls){
         return  cls.getClass().getResource("/").getPath();
     }
 
