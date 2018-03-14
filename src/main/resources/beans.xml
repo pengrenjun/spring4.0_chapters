@@ -8,13 +8,16 @@
           p:brand="红旗CA72"
           p:maxSpeed="200"
           p:color="red"
+
     />
 
     <bean id="xhContractExecution" class="com.smart.domain.XhContractExecution"
 
       p:contractType="专项合同"
       p:contractNumber="test00001"
-    />
+          init-method="initMethod"
+
+    /> <!--scope="prototype"-->
 
 
 

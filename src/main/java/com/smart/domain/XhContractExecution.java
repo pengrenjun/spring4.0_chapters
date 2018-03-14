@@ -6,9 +6,19 @@ import com.alibaba.fastjson.annotation.JSONField;
 import com.deloitte.si.core.domain.GenericEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.apache.commons.collections.CollectionUtils;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.PropertyValues;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.BeanFactoryAware;
+import org.springframework.beans.factory.BeanNameAware;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.beans.factory.config.InstantiationAwareBeanPostProcessor;
+import org.springframework.beans.factory.config.InstantiationAwareBeanPostProcessorAdapter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.beans.PropertyDescriptor;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -24,10 +34,16 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "T_FORM_RECEIPT_APPLY_SUMMARY")
-public class XhContractExecution  extends GenericEntity  {
+public class XhContractExecution  extends GenericEntity implements BeanFactoryAware, BeanNameAware, InitializingBean/*,InstantiationAwareBeanPostProcessor,BeanPostProcessor 通过注册自定义后处理器实现*/ {
 
 
     private static final long serialVersionUID = 7084228519608966618L;
+
+    public XhContractExecution() {
+        System.out.println("【1】.XhContractExecution初始化调用构造器（调用构造器之前先调用InstantiationAwareBeanPostProcessor的postProcessBeforeInstantiation方法）");
+        System.out.println("在调用构造器实例化bean之后 调用InstantiationAwareBeanPostProcessor的postProcessAfterInstantiation方法对bean进行处理");
+    }
+
     /**
      * t_form_main  id
      */
@@ -171,7 +187,13 @@ public class XhContractExecution  extends GenericEntity  {
     }
 
     public void getContractInfo(){
-        System.out.println("合同编号："+this.contractNumber+"合同类型:"+this.contractType);
+        System.out.println("合同编号："+this.contractNumber+"合同类型:"+this.contractType+"id:"+this.getId()+"部门名称:"+this.deptName);
+    }
+
+    public void initMethod(){
+
+        System.out.println("【6】.xhContractExecution初始化执行初始化方法initMethod");
+        System.out.println("此后将调用BeanPostProcessor中的postProcessAfterInitialization方法,再次获得对bean的加工处理机会");
     }
 
     public String getMainPkId() {
@@ -195,6 +217,8 @@ public class XhContractExecution  extends GenericEntity  {
     }
 
     public void setContractNumber(String contractNumber) {
+        System.out.println("【2】.bean初始化调用setContractNumber");
+        System.out.println("配置属性之前先调用InstantiationAwareBeanPostProcessor的postProcessPropertyValues方法");
         this.contractNumber = contractNumber;
     }
 
@@ -203,6 +227,8 @@ public class XhContractExecution  extends GenericEntity  {
     }
 
     public void setContractType(String contractType) {
+        System.out.println("【2】.bean初始化调用setContractType");
+        System.out.println("配置属性之前先调用InstantiationAwareBeanPostProcessor的postProcessPropertyValues方法");
         this.contractType = contractType;
     }
 
@@ -311,4 +337,53 @@ public class XhContractExecution  extends GenericEntity  {
     }
 
 
+    @Override
+    public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
+        System.out.println("【4】.调用BeanFactoryAware的setBeanFactory方法"+JSONObject.toJSONString(beanFactory));
+        System.out.println("装配了BeanPostProcessor,则将调用postProcessBeforeInitialization方法对bean进行加工处理,入参bean为当前的bean beanName 是当前bean的配置名称");
+        System.out.println("用户可以通过postProcessBeforeInitialization方法对bean进行特殊处理,AOP 动态代理都是通过BeanPostProcessor进行实施");
+    }
+
+    @Override
+    public void setBeanName(String name) {
+
+        System.out.println("【3】.调用BeanNameAware的setBeanName方法"+name);
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        System.out.println("【5】.调用InitializingBean的afterPropertiesSet方法");
+
+
+    }
+    /*已下实现为后处理器,一般不由bean本身实现,他们独立于bean,在spring创建bean的时候这些后处理器都会发生作用,可以对感兴趣的bean进行加工处理*//*
+    @Override
+    public Object postProcessBeforeInstantiation(Class<?> beanClass, String beanName) throws BeansException {
+        System.out.println("调用InstantiationAwareBeanPostProcessor的postProcessBeforeInstantiation方法");
+        return null;
+    }
+
+    @Override
+    public boolean postProcessAfterInstantiation(Object bean, String beanName) throws BeansException {
+        System.out.println("调用InstantiationAwareBeanPostProcessor的postProcessAfterInstantiation方法");
+        return false;
+    }
+
+    @Override
+    public PropertyValues postProcessPropertyValues(PropertyValues pvs, PropertyDescriptor[] pds, Object bean, String beanName) throws BeansException {
+        System.out.println("调用InstantiationAwareBeanPostProcessor的postProcessPropertyValues方法");
+        return null;
+    }
+
+    @Override
+    public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
+        System.out.println("调用InstantiationAwareBeanPostProcessor的postProcessBeforeInitialization方法");
+        return null;
+    }
+
+    @Override
+    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+        System.out.println("调用InstantiationAwareBeanPostProcessor的postProcessAfterInitialization方法");
+        return null;
+    }*/
 }
