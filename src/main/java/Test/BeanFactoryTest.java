@@ -2,6 +2,7 @@ package Test;
 
 
 
+import com.alibaba.fastjson.JSONObject;
 import com.smart.domain.Car;
 import com.smart.domain.XhContractExecution;
 import com.smart.ioc.XhContractExecutionBeanPostProcessor;
@@ -41,6 +42,30 @@ public class BeanFactoryTest {
 
         XhContractExecution xhContractExecutionC=factory.getBean("xhContractExecution",XhContractExecution.class);
         System.out.println("从缓存池获取的实例指向同一个引用："+""+(xhContractExecutionA==xhContractExecutionC));
+
+        /*通过属性注入和构造函数创建的对象*/
+        XhContractExecution xhContractExecutionD=factory.getBean("xhContractExecutionD",XhContractExecution.class);
+        System.out.println(JSONObject.toJSONString(xhContractExecutionD));
+
+
+        /*通过属性注入方式解决循环注入的问题*/
+        XhContractExecution xhContractExecutionE=factory.getBean("xhContractExecutionE",XhContractExecution.class);
+        System.out.println(JSONObject.toJSONString(xhContractExecutionE));
+
+
+        /*spring配置非静态工厂方法 生成bean*/
+        XhContractExecution xhContractExecutionF=factory.getBean("xhContractExecutionF",XhContractExecution.class);
+        System.out.println(JSONObject.toJSONString(xhContractExecutionF));
+
+
+        /*spring配置静态工厂方法 生成bean*/
+        XhContractExecution xhContractExecutionG=factory.getBean("xhContractExecutionG",XhContractExecution.class);
+        System.out.println(JSONObject.toJSONString(xhContractExecutionG));
+
+
+
+
+
 
 
 

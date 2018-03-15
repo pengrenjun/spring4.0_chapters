@@ -24,6 +24,14 @@ import java.util.Date;
 @Table(name = "T_FORM_RECEIPT_APPLY_DETAIL")
 public class XhContractExecutionDetail extends GenericEntity {
 
+    public XhContractExecutionDetail() {
+    }
+
+    public XhContractExecutionDetail(String period_name, XhContractExecution xhContractExecution) {
+        this.period_name = period_name;
+        this.xhContractExecution = xhContractExecution;
+    }
+
     /**
      *父表单id
      */
@@ -124,6 +132,9 @@ public class XhContractExecutionDetail extends GenericEntity {
      */
     @Column(name = "STATUS")
     private String status;
+
+
+
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
     @JoinColumn(name = "ENTITY_ID", referencedColumnName = "PK_ID", foreignKey = @ForeignKey(name = "null"),insertable = false, unique = false, nullable = false, updatable = false)

@@ -44,6 +44,18 @@ public class XhContractExecution  extends GenericEntity implements BeanFactoryAw
         System.out.println("在调用构造器实例化bean之后 调用InstantiationAwareBeanPostProcessor的postProcessAfterInstantiation方法对bean进行处理");
     }
 
+    /*带参数的构造函数*/
+    public XhContractExecution(String formNo, String customerName) {
+        this.formNo = formNo;
+        this.customerName = customerName;
+    }
+
+
+    public XhContractExecution(String formNo, XhContractExecutionDetail xhContractExecutionDetail) {
+        this.formNo = formNo;
+        this.xhContractExecutionDetail = xhContractExecutionDetail;
+    }
+
     /**
      * t_form_main  id
      */
@@ -160,6 +172,16 @@ public class XhContractExecution  extends GenericEntity implements BeanFactoryAw
      */
     @Column(name = "STATUS")
     private String status;
+
+    private XhContractExecutionDetail xhContractExecutionDetail;
+
+    public XhContractExecutionDetail getXhContractExecutionDetail() {
+        return xhContractExecutionDetail;
+    }
+
+    public void setXhContractExecutionDetail(XhContractExecutionDetail xhContractExecutionDetail) {
+        this.xhContractExecutionDetail = xhContractExecutionDetail;
+    }
 
     /**
      * 核销状态

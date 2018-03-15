@@ -8,17 +8,68 @@
           p:brand="红旗CA72"
           p:maxSpeed="200"
           p:color="red"
-
     />
 
     <bean id="xhContractExecution" class="com.smart.domain.XhContractExecution"
-
       p:contractType="专项合同"
       p:contractNumber="test00001"
           init-method="initMethod"
 
     /> <!--scope="prototype"-->
 
+    <bean id="xhContractExecutionD" class="com.smart.domain.XhContractExecution">
+
+        <property name="projectName"><value>兴华一期项目</value></property><!--属性注入-->
+
+        <constructor-arg index="0" type="java.lang.String"><!--构造函数注入(类型结合索引进行参数注入)-->
+            <value>dh123456789</value>
+        </constructor-arg>
+        <constructor-arg index="1" type="java.lang.String">
+            <value>北京荣之联</value>
+        </constructor-arg>
+
+    </bean>
+
+
+    <!--循环依赖的问题:Requested bean is currently in creation: Is there an unresolvable circular reference?-->
+   <!-- <bean id="xhContractExecutionE" class="com.smart.domain.XhContractExecution">
+
+        <constructor-arg value="dh1237849"/>
+        <constructor-arg ref="xhContractExecutionDetailA"/>
+    </bean>
+
+    <bean id="xhContractExecutionDetailA" class="com.smart.domain.XhContractExecutionDetail">
+
+        <constructor-arg value="dh1237849"/>
+        <constructor-arg ref="xhContractExecutionE"/>
+    </bean>-->
+    <!--Requested bean is currently in creation: Is there an unresolvable circular reference?-->
+
+    <!--改用属性注入的方式-->
+    <bean id="xhContractExecutionE" class="com.smart.domain.XhContractExecution">
+
+        <property name="formNo"><value>dh528935345</value></property>
+        <property name="xhContractExecutionDetail" ref="xhContractExecutionDetailA"/>
+    </bean>
+
+    <bean id="xhContractExecutionDetailA" class="com.smart.domain.XhContractExecutionDetail">
+
+        <property name="period_name"><value>兴华一期项目</value></property>
+        <property name="xhContractExecution" ref="xhContractExecutionE"/>
+    </bean>
+    <!--改用属性注入的方式-->
+
+
+    <!--非静态工厂方法注入 先实例化工厂,再创建bean-->
+    <bean id="xhContractExecutionFactory" class="com.smart.ioc.XhContractExecutionFactory"/>
+
+    <bean id="xhContractExecutionF" factory-bean="xhContractExecutionFactory" factory-method="getXhContractExecutionBean"/>
+    <!--非静态工厂方法注入 先实例化工厂,再创建bean-->
+
+
+    <!--静态工厂方法注入配置方法-->
+    <bean id="xhContractExecutionG" class="com.smart.ioc.XhContractExecutionFactory"  factory-method="staticGetXhContractExecutionBean"/>
+    <!--静态工厂方法注入配置方法-->
 
 
 
