@@ -5,13 +5,19 @@ package Test;
 import com.alibaba.fastjson.JSONObject;
 import com.smart.domain.Car;
 import com.smart.domain.XhContractExecution;
+import com.smart.domain.XhContractExecutionDetail;
 import com.smart.ioc.XhContractExecutionBeanPostProcessor;
 import com.smart.ioc.XhContractExecutionclassAwareBeanPostProcessor;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.core.io.Resource;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 /*通过BeanFactory加载实体bean对象*/
 public class BeanFactoryTest {
@@ -61,6 +67,37 @@ public class BeanFactoryTest {
         /*spring配置静态工厂方法 生成bean*/
         XhContractExecution xhContractExecutionG=factory.getBean("xhContractExecutionG",XhContractExecution.class);
         System.out.println(JSONObject.toJSONString(xhContractExecutionG));
+
+        /*xml特殊字符的处理*/
+        XhContractExecutionDetail xhContractExecutionDetailB=factory.getBean("xhContractExecutionDetailB",XhContractExecutionDetail.class);
+        System.out.println(JSONObject.toJSONString(xhContractExecutionDetailB));
+
+
+        /*子容器引入父容器bean*/
+        //父容器
+        ClassPathXmlApplicationContext UpapplicationContext=new ClassPathXmlApplicationContext(new String[]{"UpLevelBeans.xml"});
+        //子容器引入父容器
+        ApplicationContext applicationContext=new ClassPathXmlApplicationContext(new String[]{"beans.xml"},UpapplicationContext);
+        XhContractExecutionDetail xhContractExecutionDetailC=applicationContext.getBean("xhContractExecutionDetailC",XhContractExecutionDetail.class);
+        System.out.println(JSONObject.toJSONString(xhContractExecutionDetailC.getXhContractExecution()));
+
+        XhContractExecution xhContractExecutionH=applicationContext.getBean("xhContractExecutionH",XhContractExecution.class);
+        System.out.println("级联属性设置  "+xhContractExecutionH.getJlxhContractExecutionDetail().getPeriod_name());
+
+        /*集合类型的属性配置 list*/
+        XhContractExecution xhContractExecutionI=applicationContext.getBean("xhContractExecutionI",XhContractExecution.class);
+        System.out.println("集合类型的属性配置 list"+JSONObject.toJSONString(xhContractExecutionI.getXhContractExecutionDetailList()));
+
+
+
+        /*集合类型的属性配置 Map*/
+        XhContractExecution xhContractExecutionJ=applicationContext.getBean("xhContractExecutionJ",XhContractExecution.class);
+        System.out.println("集合类型的属性配置 Map"+JSONObject.toJSONString(xhContractExecutionJ.getXhMap()));
+
+
+
+
+
 
 
 

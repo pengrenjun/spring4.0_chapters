@@ -21,8 +21,7 @@ import javax.persistence.*;
 import java.beans.PropertyDescriptor;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.Set;
+import java.util.*;
 
 /**
  * XhContractExecution 兴华合同执行信息对象
@@ -54,6 +53,33 @@ public class XhContractExecution  extends GenericEntity implements BeanFactoryAw
     public XhContractExecution(String formNo, XhContractExecutionDetail xhContractExecutionDetail) {
         this.formNo = formNo;
         this.xhContractExecutionDetail = xhContractExecutionDetail;
+    }
+
+    /*通过级联属性直接为其对象的属性赋值,需要声明初始化对象*/
+    /*Caused by: org.springframework.beans.NullValueInNestedPathException:
+    Invalid property 'jlxhContractExecutionDetail' of bean class [com.smart.domain.XhContractExecution]:
+    Value of nested property 'jlxhContractExecutionDetail' is null*/
+     private  XhContractExecutionDetail jlxhContractExecutionDetail=new XhContractExecutionDetail();
+
+    public XhContractExecutionDetail getJlxhContractExecutionDetail() {
+        return jlxhContractExecutionDetail;
+    }
+
+    public void setJlxhContractExecutionDetail(XhContractExecutionDetail jlxhContractExecutionDetail) {
+        this.jlxhContractExecutionDetail = jlxhContractExecutionDetail;
+    }
+     /*通过级联属性直接为其对象的属性赋值,需要声明初始化对象*/
+
+
+     /*集合类型为Map的属性注入配置*/
+     private HashMap<String,XhContractExecutionDetail> xhMap;
+
+    public HashMap<String, XhContractExecutionDetail> getXhMap() {
+        return xhMap;
+    }
+
+    public void setXhMap(HashMap<String, XhContractExecutionDetail> xhMap) {
+        this.xhMap = xhMap;
     }
 
     /**
@@ -191,6 +217,17 @@ public class XhContractExecution  extends GenericEntity implements BeanFactoryAw
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "xhContractExecution", cascade = CascadeType.REFRESH)
     private Set<XhContractExecutionDetail> xhContractExecutionDetailSet;
+
+    /*list的Spring配置*/
+    private List<XhContractExecutionDetail> xhContractExecutionDetailList;
+
+    public List<XhContractExecutionDetail> getXhContractExecutionDetailList() {
+        return xhContractExecutionDetailList;
+    }
+
+    public void setXhContractExecutionDetailList(List<XhContractExecutionDetail> xhContractExecutionDetailList) {
+        this.xhContractExecutionDetailList = xhContractExecutionDetailList;
+    }
 
     public void setXhContractExecutionDetailSet(Set<XhContractExecutionDetail> xhContractExecutionDetailSet) {
         this.xhContractExecutionDetailSet = xhContractExecutionDetailSet;

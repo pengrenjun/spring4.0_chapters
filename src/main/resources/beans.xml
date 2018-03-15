@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:util="http://www.springframework.org/schema/util"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-       http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
+       http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+       http://www.springframework.org/schema/beans/spring-util-4.0.xsd">
 
     <bean id="car" class="com.smart.domain.Car"
           p:brand="红旗CA72"
@@ -71,16 +73,78 @@
     <bean id="xhContractExecutionG" class="com.smart.ioc.XhContractExecutionFactory"  factory-method="staticGetXhContractExecutionBean"/>
     <!--静态工厂方法注入配置方法-->
 
+    <!--XML特殊字符 & ,<,>,",'的处理   <![CDATA[ 含特殊字符的字面值 ]]-->
+    <bean id="xhContractExecutionDetailB" class="com.smart.domain.XhContractExecutionDetail">
 
+        <property name="period_name"><value><![CDATA[ <兴华一期项目&ronglian>]]> </value></property>
 
-
-    <bean id="customAutowireConfigurer"
-          class="org.springframework.beans.factory.annotation.CustomAutowireConfigurer">
-        <property name="customQualifierTypes">
-            <set>
-                <value>test.FineQualifier</value>
-            </set>
+        <!--ref bean 引用其他bean-->
+        <property name="xhContractExecution">
+            <ref bean="xhContractExecutionE"></ref>
         </property>
     </bean>
+
+
+
+    <!--子容器引入父容器bean-->
+
+    <bean id="xhContractExecutionDetailC" class="com.smart.domain.XhContractExecutionDetail">
+
+        <property name="period_name"><value><![CDATA[ <兴华一期项目&ronglian>]]> </value></property>
+
+        <!--ref bean 引用其他bean-->
+        <property name="xhContractExecution">
+            <ref bean="xhContractExecutionD"></ref>
+        </property>
+    </bean>
+
+
+    <!--子容器引入父容器bean-->
+
+
+    <!--级联属性的应用-->
+    <bean id="xhContractExecutionH" class="com.smart.domain.XhContractExecution">
+     <property name="jlxhContractExecutionDetail.period_name" value="阶段名称：级联属性应用设置"/>
+    </bean>
+
+    <!--list属性配置-->
+    <bean id="xhContractExecutionI" class="com.smart.domain.XhContractExecution">
+        <property name="xhContractExecutionDetailList" >
+            <list><!--通过list标签 可以存入多个值,否则只能存入一个值-->
+                <!--IllegalStateException: Cannot convert value of type [java.lang.String] to required type [com.smart.domain.XhContractExecutionDetail]
+                for property 'xhContractExecutionDetailList[0]': no matching editors or conversion strategy found-->
+               <!-- <value>qweasdasdfa</value>-->
+            <ref bean="xhContractExecutionDetailA"></ref>
+            <ref bean="xhContractExecutionDetailB"></ref>
+            </list>
+        </property>
+    </bean>
+
+    <!--Map属性配置-->
+    <bean id="xhContractExecutionJ" class="com.smart.domain.XhContractExecution">
+        <property name="xhMap">
+            <map><!--bean 的属性设为HashMap 这块会有提示 但可以使用HashMap作为属性类型-->
+                <entry>
+
+                    <key><value>key123</value></key><!--value标签注意添加-->
+                    <ref bean="xhContractExecutionDetailA"></ref>
+                </entry>
+
+                <entry>
+                    <key><value>key789</value></key>
+                    <ref bean="xhContractExecutionDetailB"></ref>
+                </entry>
+
+            </map>
+        </property>
+    </bean>
+
+
+
+
+
+
+
+
 
 </beans>

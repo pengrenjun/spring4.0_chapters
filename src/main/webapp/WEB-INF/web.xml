@@ -11,11 +11,13 @@
 
     </listener>
 
+    <!--加载子容器-->
     <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>classpath:smart-context.xml</param-value>
     </context-param>
 
+    <!--加载父容器-->
     <servlet>
         <servlet-name>smart</servlet-name>
         <servlet-class>
