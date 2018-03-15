@@ -33,7 +33,7 @@ import java.util.*;
  */
 @Entity
 @Table(name = "T_FORM_RECEIPT_APPLY_SUMMARY")
-public class XhContractExecution  extends GenericEntity implements BeanFactoryAware, BeanNameAware, InitializingBean/*,InstantiationAwareBeanPostProcessor,BeanPostProcessor 通过注册自定义后处理器实现*/ {
+public  class XhContractExecution  extends GenericEntity implements BeanFactoryAware, BeanNameAware, InitializingBean/*,InstantiationAwareBeanPostProcessor,BeanPostProcessor 通过注册自定义后处理器实现*/ {
 
 
     private static final long serialVersionUID = 7084228519608966618L;
@@ -81,6 +81,8 @@ public class XhContractExecution  extends GenericEntity implements BeanFactoryAw
     public void setXhMap(HashMap<String, XhContractExecutionDetail> xhMap) {
         this.xhMap = xhMap;
     }
+
+
 
     /**
      * t_form_main  id

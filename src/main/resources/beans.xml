@@ -140,6 +140,13 @@
     </bean>
 
 
+    <!--lookUp方法注入,每次创建单例的XhContractExecution,但对应的XhContractExecutionDetail却是不同的(新的实例)-->
+     <!--prototype类型的bean-->
+    <bean id="xhContractExecutionDetailE" class="com.smart.domain.XhContractExecutionDetail"
+    p:id=""
+    />
+
+
 
 
 
