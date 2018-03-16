@@ -4,8 +4,10 @@ package Test;
 
 import com.alibaba.fastjson.JSONObject;
 import com.smart.domain.Car;
+import com.smart.domain.SystemSetting;
 import com.smart.domain.XhContractExecution;
 import com.smart.domain.XhContractExecutionDetail;
+import com.smart.ioc.ApplySystemSetting;
 import com.smart.ioc.XhContractExecutionBeanPostProcessor;
 import com.smart.ioc.XhContractExecutionclassAwareBeanPostProcessor;
 import com.smart.ioc.abstractXhcontractExecution;
@@ -100,6 +102,17 @@ public class BeanFactoryTest {
         abstractXhcontractExecution xhcontractExecution=applicationContext.getBean("singleXhContractExeInterface",abstractXhcontractExecution.class);
         XhContractExecutionDetail xhContractExecutionDetailPro=xhcontractExecution.getPrototypeXhContractExecutionDetail();
         System.out.println(JSONObject.toJSONString(xhContractExecutionDetailPro)+" "+xhContractExecutionDetailPro.hashCode());
+
+        /*通过bean的依赖应用系统配置的系统参数*/
+        SystemSetting currentSystemSetting=applicationContext.getBean("currentSystemSetting",SystemSetting.class);
+        ApplySystemSetting applySystemSetting=new ApplySystemSetting();
+        applySystemSetting.soutCurrentSystemSetting();
+
+        /*引用bean 的名字*/
+        XhContractExecutionDetail xhContractExecutionDetailF=applicationContext.getBean("xhContractExecutionDetailF",XhContractExecutionDetail.class);
+        System.out.println("引用id："+xhContractExecutionDetailF.getEntityId());
+
+
 
 
 

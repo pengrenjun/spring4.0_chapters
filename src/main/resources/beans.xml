@@ -22,6 +22,7 @@
     <bean id="xhContractExecutionD" class="com.smart.domain.XhContractExecution">
 
         <property name="projectName"><value>兴华一期项目</value></property><!--属性注入-->
+        <property name="id"><value>id123456789</value></property>
 
         <constructor-arg index="0" type="java.lang.String"><!--构造函数注入(类型结合索引进行参数注入)-->
             <value>dh123456789</value>
@@ -151,6 +152,19 @@
     <bean id="singleXhContractExeInterface" class="com.smart.ioc.abstractXhcontractExecution">
         <lookup-method bean="xhContractExecutionDetailE" name="getPrototypeXhContractExecutionDetail"></lookup-method>
     </bean>
+
+
+    <!--通过依赖关系配置系统参数-->
+    <bean id="initSystemSeting" class="com.smart.domain.SystemSettingManageInIt"/>
+    <!--当前系统参数的值以依赖于 系统参数配置的初始化实现方法-->
+    <bean id="currentSystemSetting" class="com.smart.domain.SystemSetting" depends-on="initSystemSeting"/>
+
+    <!--一个bean引入另一个bean 的id-->
+    <bean id="xhContractExecutionDetailF" class="com.smart.domain.XhContractExecutionDetail">
+        <property name="entityId"><idref bean="xhContractExecutionD"></idref></property>
+    </bean>
+
+
 
 
 
