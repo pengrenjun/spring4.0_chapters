@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
-       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:util="http://www.springframework.org/schema/util" xmlns:jee="http://www.springframework.org/schema/jee"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
-       http://www.springframework.org/schema/beans/spring-util-4.0.xsd">
+       http://www.springframework.org/schema/beans/spring-util-4.0.xsd http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd">
 
     <bean id="car" class="com.smart.domain.Car"
           p:brand="红旗CA72"
@@ -143,15 +143,15 @@
     <!--lookUp方法注入,每次创建单例的XhContractExecution,但对应的XhContractExecutionDetail却是不同的(新的实例)-->
      <!--prototype类型的bean-->
     <bean id="xhContractExecutionDetailE" class="com.smart.domain.XhContractExecutionDetail"
-    p:id=""
+         p:period_name="兴华项目xh" p:createdBy="cz"  scope="prototype"
     />
 
+    <!--实施方法注入-->
+
+    <bean id="singleXhContractExeInterface" class="com.smart.ioc.abstractXhcontractExecution">
+        <lookup-method bean="xhContractExecutionDetailE" name="getPrototypeXhContractExecutionDetail"></lookup-method>
+    </bean>
 
 
 
-
-
-
-
-
-</beans>
+    </beans>

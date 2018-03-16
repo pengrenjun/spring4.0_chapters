@@ -8,6 +8,7 @@ import com.smart.domain.XhContractExecution;
 import com.smart.domain.XhContractExecutionDetail;
 import com.smart.ioc.XhContractExecutionBeanPostProcessor;
 import com.smart.ioc.XhContractExecutionclassAwareBeanPostProcessor;
+import com.smart.ioc.abstractXhcontractExecution;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.context.ApplicationContext;
@@ -94,16 +95,11 @@ public class BeanFactoryTest {
         XhContractExecution xhContractExecutionJ=applicationContext.getBean("xhContractExecutionJ",XhContractExecution.class);
         System.out.println("集合类型的属性配置 Map"+JSONObject.toJSONString(xhContractExecutionJ.getXhMap()));
 
+        /*lookup方法注入 创建新实例*/
 
-
-
-
-
-
-
-
-
-
+        abstractXhcontractExecution xhcontractExecution=applicationContext.getBean("singleXhContractExeInterface",abstractXhcontractExecution.class);
+        XhContractExecutionDetail xhContractExecutionDetailPro=xhcontractExecution.getPrototypeXhContractExecutionDetail();
+        System.out.println(JSONObject.toJSONString(xhContractExecutionDetailPro)+" "+xhContractExecutionDetailPro.hashCode());
 
 
 
