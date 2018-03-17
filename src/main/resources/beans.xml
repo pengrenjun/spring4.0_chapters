@@ -164,6 +164,18 @@
         <property name="entityId"><idref bean="xhContractExecutionD"></idref></property>
     </bean>
 
+    <!--通过FactoryBean接口配置bean的信息,简化实例配置-->
+    <bean id="CEfactoryBeanXhContractExecution" class="com.smart.ioc.FactoryBeanXhContractExecution">
+
+        <property name="infoMap">
+            <map>
+                <entry key="deptName" value="审计一部/流程化一部"/>
+                <entry key="id" value="id1238974892"/>
+            </map>
+        </property>
+
+    </bean>
+
 
 
 

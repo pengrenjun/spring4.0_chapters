@@ -7,10 +7,8 @@ import com.smart.domain.Car;
 import com.smart.domain.SystemSetting;
 import com.smart.domain.XhContractExecution;
 import com.smart.domain.XhContractExecutionDetail;
-import com.smart.ioc.ApplySystemSetting;
-import com.smart.ioc.XhContractExecutionBeanPostProcessor;
-import com.smart.ioc.XhContractExecutionclassAwareBeanPostProcessor;
-import com.smart.ioc.abstractXhcontractExecution;
+import com.smart.ioc.*;
+import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.context.ApplicationContext;
@@ -113,6 +111,18 @@ public class BeanFactoryTest {
         System.out.println("引用id："+xhContractExecutionDetailF.getEntityId());
 
 
+        /*通过FactoryBean接口配置bean的信息,简化实例配置*/
+        /*获得FactoryBean实体需要加上&进行标记*/
+        FactoryBean<XhContractExecution> factoryBeanXhContractExecution=applicationContext.getBean("&CEfactoryBeanXhContractExecution",FactoryBean.class);
+        try {
+            XhContractExecution xhContractExecutionFactoryCreate=factoryBeanXhContractExecution.getObject();
+            System.out.println("通过FactoryBean接口配置bean的信息,简化实例配置:"+xhContractExecutionFactoryCreate.getDeptName()+" "+xhContractExecutionFactoryCreate.getId());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        XhContractExecution CExhContractExecution=applicationContext.getBean("CEfactoryBeanXhContractExecution",XhContractExecution.class);
+        System.out.println("通过FactoryBean接口配置bean的信息,简化实例配置:"+CExhContractExecution.getDeptName()+" "+CExhContractExecution.getId());
 
 
 
