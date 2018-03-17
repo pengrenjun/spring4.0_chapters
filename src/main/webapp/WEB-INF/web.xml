@@ -4,11 +4,20 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
 	http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+    <!--ContextLoaderListener负责通过web的启动和关闭控制Spring容器的操作-->
     <listener>
         <listener-class>
             org.springframework.web.context.ContextLoaderListener
         </listener-class>
 
+    </listener>
+
+    <!--RequestContextListener监听器负责监听http请求,spring容器可以因此得到http请求的三个作用域
+    request,session,globalsession将web与spring容器结合的更为紧密-->
+    <listener>
+        <listener-class>
+            org.springframework.web.context.request.RequestContextListener
+        </listener-class>
     </listener>
 
     <!--加载子容器-->
