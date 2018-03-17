@@ -1,6 +1,8 @@
 package com.smart.service;
 
 import java.util.Date;
+
+import com.smart.ioc.MyComponent;
 import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
 import org.testng.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,13 @@ import static org.testng.Assert.*;
 public class UserServiceTest extends AbstractTransactionalTestNGSpringContextTests {
 	@Autowired
     private UserService userService;
+
+	@Autowired
+	private MyComponent myComponent;
+
+
+
+
 
 	@Test
 	public void testHasMatchUser() {
@@ -39,5 +48,11 @@ public class UserServiceTest extends AbstractTransactionalTestNGSpringContextTes
 		user.setLastIp("192.168.12.7");
 		user.setLastVisit(new Date());
 		userService.loginSuccess(user);
+	}
+
+	@Test/*测试集合的自动注入功能*/
+	public void testMyComponent(){
+
+		myComponent.getClassInfo();
 	}
 }

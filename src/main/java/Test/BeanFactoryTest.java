@@ -16,9 +16,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.core.io.Resource;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /*通过BeanFactory加载实体bean对象*/
 public class BeanFactoryTest {
@@ -127,4 +125,6 @@ public class BeanFactoryTest {
 
 
     }
+
+
 }
