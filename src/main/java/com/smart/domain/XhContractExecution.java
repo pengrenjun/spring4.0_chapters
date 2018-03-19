@@ -74,6 +74,17 @@ public  class XhContractExecution  extends GenericEntity implements BeanFactoryA
      /*集合类型为Map的属性注入配置*/
      private HashMap<String,XhContractExecutionDetail> xhMap;
 
+     /*自定义的类型,通过自定义属性编辑器完成属性的注入*/
+     private User user;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public HashMap<String, XhContractExecutionDetail> getXhMap() {
         return xhMap;
     }
