@@ -8,6 +8,7 @@ import com.smart.domain.SystemSetting;
 import com.smart.domain.XhContractExecution;
 import com.smart.domain.XhContractExecutionDetail;
 import com.smart.ioc.*;
+import org.apache.cxf.wsdl11.SOAPBindingUtil;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
@@ -123,6 +124,8 @@ public class BeanFactoryTest {
         System.out.println("通过FactoryBean接口配置bean的信息,简化实例配置:"+CExhContractExecution.getDeptName()+" "+CExhContractExecution.getId());
 
 
+        XhContractExecution editorXhContractExection=applicationContext.getBean("editorXhContractExection",XhContractExecution.class);
+        System.out.println("自定义属性编辑器："+JSONObject.toJSONString(editorXhContractExection));
 
     }
 

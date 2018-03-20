@@ -178,7 +178,23 @@
 
     <!--通过自定义属性编辑器 为User的id,password属性赋值-->
     <!--配置User自动注册的属性编辑器-->
+    <!--使用ApllicationContext 在配置文件中通过配置customEditorConfigurer即可注册自定义的属性编辑器-->
+    <bean class="org.springframework.beans.factory.config.CustomEditorConfigurer">
+        <property name="customEditors">
 
+            <map>
+              <entry key="com.smart.domain.User" value="com.smart.ioc.UserPropertyEditor"/>
+
+            </map>
+        </property>
+    </bean>
+
+    <!--通过自定义的编辑器为xhcontractExecution中的属性进行字面值的赋值-->
+    <bean id="editorXhContractExection" class="com.smart.domain.XhContractExecution">
+        <property name="contractType" value="合同-自定义编辑器的使用"/>
+        <property name="user" value="3894579,123456789"/>
+
+    </bean>
 
 
 
