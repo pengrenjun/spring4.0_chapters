@@ -77,7 +77,7 @@ public class BeanFactoryTest {
         //父容器
         ClassPathXmlApplicationContext UpapplicationContext=new ClassPathXmlApplicationContext(new String[]{"UpLevelBeans.xml"});
         //子容器引入父容器
-        ApplicationContext applicationContext=new ClassPathXmlApplicationContext(new String[]{"beans.xml"},UpapplicationContext);
+        ApplicationContext applicationContext=new ClassPathXmlApplicationContext(new String[]{"beans.xml","smart-context.xml"},UpapplicationContext);
         XhContractExecutionDetail xhContractExecutionDetailC=applicationContext.getBean("xhContractExecutionDetailC",XhContractExecutionDetail.class);
         System.out.println(JSONObject.toJSONString(xhContractExecutionDetailC.getXhContractExecution()));
 
@@ -126,6 +126,10 @@ public class BeanFactoryTest {
 
         XhContractExecution editorXhContractExection=applicationContext.getBean("editorXhContractExection",XhContractExecution.class);
         System.out.println("自定义属性编辑器："+JSONObject.toJSONString(editorXhContractExection));
+
+        SystemSetting systemSettingInfo=applicationContext.getBean("systemSettingInfo",SystemSetting.class);
+        System.out.println(JSONObject.toJSONString(systemSettingInfo));
+
 
     }
 

@@ -79,5 +79,6 @@ public class DESUtils {
 		System.out.println(DESUtils.getDecryptString("WnplV/ietfQ="));
 		System.out.println(DESUtils.getDecryptString("HyQH1bD/jNs="));
 
+
 	}
 }

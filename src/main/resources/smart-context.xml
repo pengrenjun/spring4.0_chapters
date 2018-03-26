@@ -33,15 +33,26 @@
 
 	<!--使用加密属性文件对配置信息进行加密处理-->
 	<!--加载自定义的属性编辑器-->
-	<bean class="Utils.mysqlPropertyDesProcess" p:location="classpath*:mysql-jdbcDES.properties"
-		  p:fileEncoding="utf-8"/>
+	<!--<bean class="Utils.mysqlPropertyDesProcess" p:location="classpath*:mysql-jdbcDES.properties"
+		  p:fileEncoding="utf-8"/>-->
 
 	<!--通过自定义的加密属性编辑器配置数据源-->
-	<bean id="dataSourceB" class="org.apache.commons.dbcp.BasicDataSource"
+	<!--<bean id="dataSourceB" class="org.apache.commons.dbcp.BasicDataSource"
 		  p:driverClassName="${driverClassNameDES}"
 	      p:url="${urlDES}"
 	      p:username="${usernameDES}"
-		  p:password="${passwordDES}"/>
+		  p:password="${passwordDES}"/>-->
+
+
+	<!--与数据连接加载系统配置信息 -->
+	<bean id="systemSettingConf" class="com.smart.domain.SystemSettingManageInIt"
+		  p:dataSource-ref="dataSource"
+		  init-method="initSystemSetting"/>
+
+	<!--引用其他bean的属性值-->
+	<bean id="systemSettingInfo" class="com.smart.domain.SystemSetting"
+		  p:sessionTimeOut="#{systemSettingConf.sessionTimeOut}"
+		  p:refeshCycle="#{systemSettingConf.refeshCycle}"/>
 
 
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"

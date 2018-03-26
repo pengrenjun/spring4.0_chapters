@@ -196,6 +196,27 @@
 
     </bean>
 
+    <!--通过配置MessageResource的实现类ResourceBundleMessageSource,批量加载不同区域资源文件信息-->
+    <bean id="resourceBean" class="org.springframework.context.support.ResourceBundleMessageSource">
+        <property name="basenames">
+            <!--通过基名寻找加载普通的资源文件,相对于类路径-->
+            <list>
+                <value>resource</value>
+            </list>
+        </property>
+    </bean>
+
+    <!--通过配置MessageResource的实现类ReloadableResourceBundleMessageSource,定时刷新批量加载不同区域资源文件信息-->
+    <bean id="reloadSourceBean" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="basenames">
+            <!--通过基名寻找加载普通的资源文件,相对于类路径-->
+            <list>
+                <value>resource</value>
+            </list>
+        </property>
+        <property name="cacheSeconds" value="9"/><!--刷新资源周期,以秒为单位-->
+    </bean>
+
 
 
 
