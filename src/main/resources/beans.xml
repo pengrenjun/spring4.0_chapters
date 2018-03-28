@@ -217,6 +217,17 @@
         <property name="cacheSeconds" value="9"/><!--刷新资源周期,以秒为单位-->
     </bean>
 
+    <!--bean的名称只能为messageSource 这样在ApplicationContext中可以直接加在messageSource 国际化的信息资源在容器启动时会调用initMessageSource方法 查找名为messageSource的bean-->
+    <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+        <property name="basenames">
+            <!--通过基名寻找加载普通的资源文件,相对于类路径-->
+            <list>
+                <value>resource</value>
+            </list>
+        </property>
+        <property name="cacheSeconds" value="9"/><!--刷新资源周期,以秒为单位-->
+    </bean>
+
 
 
 
