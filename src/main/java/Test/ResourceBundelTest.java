@@ -1,7 +1,11 @@
 package Test;
 
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationListener;
 import org.springframework.context.MessageSource;
+import org.springframework.context.event.GenericApplicationListener;
+import org.springframework.context.event.SimpleApplicationEventMulticaster;
+import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.text.MessageFormat;
@@ -54,8 +58,6 @@ public class ResourceBundelTest {
         //通过容器启动时的initMessage()方法直接通过ApplicationContext加载国际化的信息资源
         String internetMessageInfo=ctx.getMessage("one",params,Locale.CANADA);
         System.out.println("通过容器启动时的initMessage()方法直接通过ApplicationContext加载国际化的信息资源:"+internetMessageInfo);
-
-
 
 
 
