@@ -229,8 +229,8 @@
     </bean>
 
     <!--配置容器事件监听器和发布器-->
-    <bean class="Test.EventAndListener.EventListener"/>
-    <bean id="eventSender" class="Test.EventAndListener.EventSender"/>
+    <bean class="com.smart.EventAndListener.EventListener"/>
+    <bean id="eventSender" class="com.smart.EventAndListener.EventSender"/>
 
 
 
