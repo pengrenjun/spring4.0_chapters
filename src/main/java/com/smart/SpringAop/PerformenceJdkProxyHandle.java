@@ -4,11 +4,11 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
 /*性能检测横切代码块实现 jdK java.lang.reflect.InvocationHandler */
-public class PerformenceHandle implements InvocationHandler{
+public class PerformenceJdkProxyHandle implements InvocationHandler{
     //目标业务类(需要被代理的业务实例对象)
     private  Object target;
 
-    public PerformenceHandle(Object target) {
+    public PerformenceJdkProxyHandle(Object target) {
         this.target = target;
     }
 

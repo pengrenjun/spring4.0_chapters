@@ -2,7 +2,7 @@ package com.smart.SpringAop;
 
 /*通过jdk的动态代理将检测功能代码与业务层代码进行模块化处理*/
 
-public class JdkProxyForumServiceImpl implements ForumService {
+public class ProxyForumServiceImpl implements ForumService {
 
 	@Override
 	public void removeTopic(int topicId) {
