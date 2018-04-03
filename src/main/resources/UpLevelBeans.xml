@@ -11,6 +11,31 @@
 
     </bean>
 
+    <!--springAop增强代理的配置-->
+    <!--前置增强-->
+    <!--配置前置增强-->
+    <bean id="userInfoBeforAdvice" class="com.smart.SpringAop.UserInfoSpringAopAdvice.UserInfoBeforeAdvice"/>
+    <!--配置代理目标类-->
+    <bean id="proxyTargetA" class="com.smart.SpringAop.UserInfoServiceImpl"/>
+    <!--配置工厂代理实现类ProxyFactoryBean(创建代理类) 配置代理的接口(采用jdk动态代理 p:proxyTargetClass="true"采用Cglib动态代理),增强,代理目标类-->
+    <bean id="userInforServiceProxyA" class="org.springframework.aop.framework.ProxyFactoryBean"
+          p:interceptorNames="userInfoBeforAdvice"
+          p:target-ref="proxyTargetA"
+          p:proxyTargetClass="true"
+    />
+
+    <!--前置增强和后置增强整合-->
+    <!--配置后置增强-->
+    <bean id="userInfoAfterAdvice" class="com.smart.SpringAop.UserInfoSpringAopAdvice.UserInfoServiceAfterAdvice"/>
+    <!--配置代理目标类-->
+    <bean id="proxyTargetB" class="com.smart.SpringAop.UserInfoServiceImpl"/>
+    <!--配置工厂代理实现类ProxyFactoryBean 整合前置和后置增强-->
+    <bean id="userInforServiceProxyB" class="org.springframework.aop.framework.ProxyFactoryBean"
+          p:proxyTargetClass="true"
+          p:interceptorNames="userInfoBeforAdvice,userInfoAfterAdvice"
+          p:target-ref="proxyTargetB"/>
+
+
 
 
 </beans>

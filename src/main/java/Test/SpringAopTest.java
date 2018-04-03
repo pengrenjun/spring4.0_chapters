@@ -1,6 +1,11 @@
 package Test;
 
+import com.alibaba.fastjson.JSONObject;
 import com.smart.SpringAop.*;
+import com.smart.SpringAop.UserInfoSpringAopAdvice.UserInfoBeforeAdvice;
+import org.springframework.aop.BeforeAdvice;
+import org.springframework.aop.framework.ProxyFactory;
+import org.springframework.context.ApplicationContext;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
@@ -9,13 +14,55 @@ public class SpringAopTest {
 
     public static void main(String[] args) {
         //测试第一个实例:拥有性能检测能力的ForumServiceImpl业务方法
-        testFirstInstance();
+        //testFirstInstance();
         //通过jdk的动态代理 测试拥有性能检测能力的ProxyForumServiceImpl业务方法
-        testJdkProxyForumServieImpl();
+        //testJdkProxyForumServieImpl();
         //通过CGLIB的动态代理  测试拥有性能检测能力的ProxyForumServiceImpl业务方法
-        testCglibProxyForumServieImpl();
+        //testCglibProxyForumServieImpl();
+        //用户信息获取前置增强(打印调用方法的入参)
+        //testBeforeAdvice();
+        //用户信息获取 前置与后置增强(打印调用方法的入参,打印返回的结果)
+        testBeforeAndAfterAdvice();
 
 
+    }
+
+    private static void testBeforeAndAfterAdvice() {
+
+        //通过springXml配置设置前置代理
+        ApplicationContext ctx=BeanFactoryTest.getApplicationContextByXml("UpLevelBeans.xml");
+        //采用Cglib动态代理配置
+        UserInfoServiceImpl proxyUserInfoServiceXml=(UserInfoServiceImpl)ctx.getBean("userInforServiceProxyB");
+        System.out.println("----------------------Cglib动态代理的前置后置配置---------------------------------------------");
+        proxyUserInfoServiceXml.getUserPassWord("2");
+    }
+
+    private static void testBeforeAdvice() {
+        //创建代理的目标类
+        UserInfoService userInfoService=new UserInfoServiceImpl();
+        //得到前置增强
+        BeforeAdvice userBeforeAdvice=new UserInfoBeforeAdvice();
+        //spring的代理工厂(通过jdk和Cglib的动态代理将增强加入到代理目标中)
+        ProxyFactory proxyFactory=new ProxyFactory();
+        //采用jdk动态代理(指定接口信息)
+        proxyFactory.setInterfaces(userInfoService.getClass().getInterfaces());
+        //设置代理目标(默认Cglib代理)
+        proxyFactory.setTarget(userInfoService);
+        //设置前置增强(可以设置多个前置增强,调用顺序和添加顺序相同)
+        proxyFactory.addAdvice(userBeforeAdvice);
+        //得到代理的实例
+        UserInfoService proxyUserInfoService=(UserInfoService)proxyFactory.getProxy();
+        System.out.println(JSONObject.toJSONString(proxyUserInfoService));
+        //代理后的方法测试
+        System.out.println(proxyUserInfoService.getUserName("1"));
+
+
+        //通过springXml配置设置前置代理
+        ApplicationContext ctx=BeanFactoryTest.getApplicationContextByXml("UpLevelBeans.xml");
+        //采用Cglib动态代理配置
+        UserInfoServiceImpl proxyUserInfoServiceXml=(UserInfoServiceImpl)ctx.getBean("userInforServiceProxyA");
+        System.out.println("----------------------Cglib动态代理的前置配置---------------------------------------------");
+        proxyUserInfoServiceXml.getUserIp("2");
     }
 
     //通过CGLIB的动态代理  测试拥有性能检测能力的ProxyForumServiceImpl业务方法

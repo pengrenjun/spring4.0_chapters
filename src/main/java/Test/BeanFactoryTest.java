@@ -132,6 +132,10 @@ public class BeanFactoryTest {
 
 
     }
+    //根据xml的类路径获得上下文对象
+    public static ApplicationContext getApplicationContextByXml(String xmlPath){
+        return new ClassPathXmlApplicationContext(new String[]{xmlPath});
+    }
 
 
 }
