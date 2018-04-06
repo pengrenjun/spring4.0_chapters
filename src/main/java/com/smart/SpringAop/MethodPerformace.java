@@ -4,7 +4,9 @@ public class MethodPerformace {
 	private long begin;
 	private long end;
 	private String serviceMethod;
+	
     public MethodPerformace(String serviceMethod){
+
     	reset(serviceMethod);
     }
     public void printPerformace(){

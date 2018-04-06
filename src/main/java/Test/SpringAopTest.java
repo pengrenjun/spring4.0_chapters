@@ -2,6 +2,7 @@ package Test;
 
 import com.alibaba.fastjson.JSONObject;
 import com.smart.SpringAop.*;
+import com.smart.SpringAop.UserInfoSpringAopAdvice.MonitorInterface;
 import com.smart.SpringAop.UserInfoSpringAopAdvice.UserInfoBeforeAdvice;
 import org.springframework.aop.BeforeAdvice;
 import org.springframework.aop.framework.ProxyFactory;
@@ -19,12 +20,77 @@ public class SpringAopTest {
         //testJdkProxyForumServieImpl();
         //通过CGLIB的动态代理  测试拥有性能检测能力的ProxyForumServiceImpl业务方法
         //testCglibProxyForumServieImpl();
-        //用户信息获取前置增强(打印调用方法的入参)
+        //用户信息获取前置增强(打印调用方法的入参)(手工编码的方式添加增强)
         //testBeforeAdvice();
         //用户信息获取 前置与后置增强(打印调用方法的入参,打印返回的结果)
-        testBeforeAndAfterAdvice();
+        //testBeforeAndAfterAdvice();
+        //用户信息获取 通过环绕增强实现前置和后置增强的效果
+        //testAroundAdvice();
+        //用户信息获取 对抛出的异常进行增强处理
+        //testExceptionAdvice();
+        //测试引介增强
+        //testIntroduceAdvice();
+        //测试通过静态类方法创建的切面配合增强实现对用户密码信息获取方法的环绕增强处理
+        //testStaticMethodPointAdviceToUserPassWordFuction();
+        //测试正则表达式的静态切面 实现对用户信息获取中的所有getUser开头的方法实现环绕增强
+        //testRegecAdvice();
+        testDynamicPointCutAdvice();
+
+    }
+
+    private static void testDynamicPointCutAdvice() {
+        ApplicationContext ctx=BeanFactoryTest.getApplicationContextByXml("UpLevelBeans.xml");
+        //在创建动态代理类的时候就进行了类和方法的静态检测
+        UserInfoServiceImpl proxyUserInfoServiceXml=(UserInfoServiceImpl)ctx.getBean("proxyUserServiceByDynamicPointCut");
+        System.out.println("-------------通过动态代理创建的切面配合增强实现对用户getUserIp方法的环绕增强处理(且对入参进行了动态检测)----------------------------");
+        proxyUserInfoServiceXml.getUserIp("2");
+        proxyUserInfoServiceXml.getUserName("1");
+    }
+
+    private static void testRegecAdvice() {
+        ApplicationContext ctx=BeanFactoryTest.getApplicationContextByXml("UpLevelBeans.xml");
+        UserInfoServiceImpl proxyUserInfoServiceXml=(UserInfoServiceImpl)ctx.getBean("proxyTargetByRegexAdvice");
+        System.out.println("-------------通过正则表达式创建的切面配合增强实现对用户getUser方法的环绕增强处理----------------------------");
+        proxyUserInfoServiceXml.getUserPassWord("1");
+        proxyUserInfoServiceXml.getUserName("1");
+        proxyUserInfoServiceXml.getUserIp("3");
+    }
+
+    private static void testStaticMethodPointAdviceToUserPassWordFuction() {
+        ApplicationContext ctx=BeanFactoryTest.getApplicationContextByXml("UpLevelBeans.xml");
+        UserInfoServiceImpl proxyUserInfoServiceXml=(UserInfoServiceImpl)ctx.getBean("ProxyFactoryBeanUser");
+        ProxyForumServiceImpl proxyForumService=(ProxyForumServiceImpl)ctx.getBean("ProxyFactoryBeanForum");
+        System.out.println("-------------通过静态类方法创建的切面配合增强实现对用户密码信息获取方法的环绕增强处理----------------------------");
+        proxyForumService.removeForum(123);
+        proxyUserInfoServiceXml.getUserName("1");
+        //会对用户的密码信息获取实现环绕增强
+        proxyUserInfoServiceXml.getUserPassWord("1");
 
 
+    }
+
+    private static void testIntroduceAdvice() {
+        ApplicationContext ctx=BeanFactoryTest.getApplicationContextByXml("UpLevelBeans.xml");
+        UserInfoServiceImpl proxyUserInfoServiceXml=(UserInfoServiceImpl)ctx.getBean("userInforServiceProxyE");
+        MonitorInterface monitor=(MonitorInterface)proxyUserInfoServiceXml;
+        monitor.setBeforeAdvice(true);
+        monitor.setAfterAdvice(true);
+        proxyUserInfoServiceXml.getUserName("1");
+    }
+
+    private static void testExceptionAdvice() {
+        ApplicationContext ctx=BeanFactoryTest.getApplicationContextByXml("UpLevelBeans.xml");
+        UserInfoServiceImpl proxyUserInfoServiceXml=(UserInfoServiceImpl)ctx.getBean("userInforServiceProxyD");
+        System.out.println("----------------------Cglib动态代理的异常抛出增强---------------------------------------------");
+        proxyUserInfoServiceXml.getUserName("2");
+        proxyUserInfoServiceXml.getUserName("3");
+    }
+
+    private static void testAroundAdvice() {
+        ApplicationContext ctx=BeanFactoryTest.getApplicationContextByXml("UpLevelBeans.xml");
+        UserInfoServiceImpl proxyUserInfoServiceXml=(UserInfoServiceImpl)ctx.getBean("userInforServiceProxyC");
+        System.out.println("----------------------Cglib动态代理的环绕增强---------------------------------------------");
+        proxyUserInfoServiceXml.getUserName("2");
     }
 
     private static void testBeforeAndAfterAdvice() {
@@ -79,6 +145,7 @@ public class SpringAopTest {
 
     //通过自定义的代理器PerformenceHandle将检测代码块与业务实例的代码块进行合并处理
     private static void testJdkProxyForumServieImpl() {
+
         //创建待被代理业务实例
         ForumService proxyTarget = new ProxyForumServiceImpl();
 

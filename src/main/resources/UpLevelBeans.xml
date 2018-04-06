@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:util="http://www.springframework.org/schema/util"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-       http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
+       http://www.springframework.org/schema/beans/spring-beans-4.0.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
 
     <bean id="xhContractExecutionD" class="com.smart.domain.XhContractExecution">
@@ -34,6 +35,104 @@
           p:proxyTargetClass="true"
           p:interceptorNames="userInfoBeforAdvice,userInfoAfterAdvice"
           p:target-ref="proxyTargetB"/>
+
+    <!--环绕增强-->
+    <!--配置环绕增强-->
+    <bean id="userInfoAroundAdvice" class="com.smart.SpringAop.UserInfoSpringAopAdvice.UserInfoServiceAroundAdvice"/>
+    <!--配置代理目标类-->
+    <bean id="proxyTargetC" class="com.smart.SpringAop.UserInfoServiceImpl" />
+    <!--配置工厂代理实现类ProxyFactoryBean创建代理对象 采用Cglib的动态代理方式-->
+    <bean id="userInforServiceProxyC" class="org.springframework.aop.framework.ProxyFactoryBean"
+          p:interceptorNames="userInfoAroundAdvice"
+          p:target-ref="proxyTargetC"
+          p:optimize="true"/>
+
+    <!--异常抛出增强-->
+    <!--配置环绕增强-->
+    <bean id="userInfoExceptionAdvice" class="com.smart.SpringAop.UserInfoSpringAopAdvice.UserInfoExceptionAdvice"/>
+    <!--配置代理的目标类-->
+    <bean id="proxyTargetD" class="com.smart.SpringAop.UserInfoServiceImpl"/>
+    <!--配置工厂代理实现类ProxyFactoryBean创建代理对象  采用Cglib的动态代理方式-->
+    <bean id="userInforServiceProxyD" class="org.springframework.aop.framework.ProxyFactoryBean"
+          p:interceptorNames="userInfoAroundAdvice,userInfoExceptionAdvice"
+          p:optimize="true"
+          p:target-ref="proxyTargetD"/>
+
+
+    <!--引介增强-->
+    <!--配置引介增强-->
+    <bean id="userInfoIntroduceAdvice" class="com.smart.SpringAop.UserInfoSpringAopAdvice.UserInfoServiceIntroduceAdvice"/>
+    <!--配置代理的目标类-->
+    <bean id="proxyTargetE" class="com.smart.SpringAop.UserInfoServiceImpl"/>
+    <!--配置工厂代理实现类ProxyFactoryBean创建代理对象  采用Cglib的动态代理方式-->
+    <bean id="userInforServiceProxyE" class="org.springframework.aop.framework.ProxyFactoryBean"
+          p:interfaces="com.smart.SpringAop.UserInfoSpringAopAdvice.MonitorInterface"
+          p:proxyTargetClass="true"
+          p:target-ref="proxyTargetE"
+          p:interceptorNames="userInfoIntroduceAdvice,userInfoExceptionAdvice"/>
+
+
+    <!--静态类注释方法匹配切面配合增强实现特定方法的切入-->
+    <!--定义测试的两个代理目标proxyTargetA(前面定义的) 需要进行性能检测的业务类对象-->
+    <bean id="forumServiceProxyTarget" class="com.smart.SpringAop.ProxyForumServiceImpl"/>
+    <!--向切面注入用户信息获取的环绕增强-->
+    <bean id="staticMethodPointcutAdvice" class="com.smart.SpringAop.KindsPointAdvice.StaticMethodPointcutAdvice"
+          p:advice-ref="userInfoAroundAdvice"
+    />
+    <!--定义父bean的nProxyFactoryBean 配置代理目标-->
+    <bean id="parentProxyFactoryBean" abstract="true" class="org.springframework.aop.framework.ProxyFactoryBean"
+          p:proxyTargetClass="true"
+          p:interceptorNames="staticMethodPointcutAdvice"
+    />
+    <!--配置代理目标类-->
+    <bean id="ProxyFactoryBeanUser" parent="parentProxyFactoryBean"
+          p:target-ref="proxyTargetA"/>
+    <bean id="ProxyFactoryBeanForum" parent="parentProxyFactoryBean"
+          p:target-ref="forumServiceProxyTarget"/>
+
+
+
+
+    <!--通过静态正则表达式方法匹配切面 RegexpMethodPointcutAdvisor不需要进行扩展 直接进行配置即可-->
+    <!--在切面中引入环绕增强-->
+    <bean id="regexAdvice" class="org.springframework.aop.support.RegexpMethodPointcutAdvisor"
+          p:advice-ref="userInfoAroundAdvice">
+           <property name="patterns">
+               <list>
+                   <value>.*getUser.*</value>
+               </list>
+           </property>
+    </bean>
+    <!--创建用户信息获取的代理类-->
+    <bean id="proxyTargetByRegexAdvice" class="org.springframework.aop.framework.ProxyFactoryBean"
+          p:interceptorNames="regexAdvice"
+          p:proxyTargetClass="true"
+          p:target-ref="proxyTargetA"/>
+
+
+    <!--通过配置DefaultPointcutAdvisor进行动态切面的配置-->
+    <!--配置动态切点-->
+    <bean id="dynamicUserPointCut" class="com.smart.SpringAop.KindsPointAdvice.DynamicPointCut"/>
+    <!--配置DefaultPointcutAdvisor-->
+    <bean id="dynamicUserServicePointCutAdvice" class="org.springframework.aop.support.DefaultPointcutAdvisor"
+          p:advice-ref="userInfoAroundAdvice"
+          p:pointcut-ref="dynamicUserPointCut"
+    />
+    <!--创建动态切点代理类-->
+    <bean id="proxyUserServiceByDynamicPointCut" class="org.springframework.aop.framework.ProxyFactoryBean"
+          p:target-ref="proxyTargetA"
+          p:interceptorNames="dynamicUserServicePointCutAdvice"
+          p:proxyTargetClass="true"/>
+
+
+
+
+
+
+
+
+
+
 
 
 

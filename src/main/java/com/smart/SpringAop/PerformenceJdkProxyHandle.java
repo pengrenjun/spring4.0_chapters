@@ -21,6 +21,7 @@ public class PerformenceJdkProxyHandle implements InvocationHandler{
      * @Param args    方法的入参
      */
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+
         //性能检测横切代码块
         PerformanceMonitor.begin(target.getClass().getName()+"."+method.getName());
         //通过反射方法调用业务类的目标方法 业务逻辑代码
