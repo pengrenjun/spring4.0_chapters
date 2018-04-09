@@ -6,6 +6,8 @@
        http://www.springframework.org/schema/beans/spring-beans-4.0.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
 
+
+
     <bean id="xhContractExecutionD" class="com.smart.domain.XhContractExecution">
 
         <property name="formNo"><value>Uplevel_dh528935345</value></property>
@@ -163,6 +165,21 @@
           p:interceptorNames="userInfoComposableAdvice"
           p:target-ref="proxyTargetA"
           p:proxyTargetClass="true"/>
+
+    <!--通过BeanNameAutoProyCreator配置自动代理-->
+    <bean id="BeanNameAutoProyForm" class="com.smart.SpringAop.ForumServiceImpl"/>
+
+    <bean id="BeanNameAutoProyUser" class="com.smart.SpringAop.UserInfoServiceImpl"/>
+
+    <bean class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator"
+          p:proxyTargetClass="true"
+          p:beanNames="BeanNameAutoProy*"
+          p:interceptorNames="userInfoComposableAdvice"/>
+
+
+    <!--通过DefaultAdvisorAutoProxyCreator配置自动代理 将容器中的Advisor织入匹配的目标Bean中-->
+   <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"/>
+
 
 
 

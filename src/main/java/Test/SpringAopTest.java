@@ -40,8 +40,33 @@ public class SpringAopTest {
         //测试流程切面
         //testControllerFlowAdvice();
         //测试流程切点和方法名切点复合的切面(只用用户的密码信息获取会被增强处理)
-        testComposableCutAdvice();
+        //testComposableCutAdvice();
+        //测试通过BeanNameAutoProyCreator配置自动代理
+        testBeanNameAutoProyCreator();
+        //testDefaultAdvisorAutoProxyCreator();
 
+    }
+
+    private static void testDefaultAdvisorAutoProxyCreator() {
+        System.out.println("-----------------------------------通过BeanNameAutoProyCreator配置自动代理----------------------------");
+        ApplicationContext ctx=BeanFactoryTest.getApplicationContextByXml("UpLevelBeans.xml");
+        //容器在创建BeanNameAutoProyUser BeanNameAutoProyForm两个实例时就创建了相应的代理类
+        UserInfoServiceImpl userInfoService=(UserInfoServiceImpl)ctx.getBean("DefaultAdvisorAutoProxyUser");
+        userInfoService.getUserPassWord("1");
+
+    }
+
+    private static void testBeanNameAutoProyCreator() {
+        System.out.println("-----------------------------------通过BeanNameAutoProyCreator配置自动代理----------------------------");
+        ApplicationContext ctx=BeanFactoryTest.getApplicationContextByXml("UpLevelBeans.xml");
+        //容器在创建BeanNameAutoProyUser BeanNameAutoProyForm两个实例时就创建了相应的代理类
+        UserInfoServiceImpl userInfoService=(UserInfoServiceImpl)ctx.getBean("BeanNameAutoProyUser");
+        UserInfoServiceDelegate userInfoServiceDelegate=new UserInfoServiceDelegate();
+        userInfoServiceDelegate.setUserInfoService(userInfoService);
+        userInfoServiceDelegate.getUserInfo("1");
+
+        ForumServiceImpl forumService=(ForumServiceImpl)ctx.getBean("BeanNameAutoProyForm");
+        forumService.removeForum(123);
     }
 
     private static void testComposableCutAdvice() {
