@@ -2,6 +2,7 @@ package Test;
 
 import com.alibaba.fastjson.JSONObject;
 import com.smart.SpringAop.*;
+import com.smart.SpringAop.KindsPointAdvice.UserInfoServiceDelegate;
 import com.smart.SpringAop.UserInfoSpringAopAdvice.MonitorInterface;
 import com.smart.SpringAop.UserInfoSpringAopAdvice.UserInfoBeforeAdvice;
 import org.springframework.aop.BeforeAdvice;
@@ -34,9 +35,33 @@ public class SpringAopTest {
         //testStaticMethodPointAdviceToUserPassWordFuction();
         //测试正则表达式的静态切面 实现对用户信息获取中的所有getUser开头的方法实现环绕增强
         //testRegecAdvice();
-        testDynamicPointCutAdvice();
+        //测试动态切面
+        //testDynamicPointCutAdvice();
+        //测试流程切面
+        //testControllerFlowAdvice();
+        //测试流程切点和方法名切点复合的切面(只用用户的密码信息获取会被增强处理)
+        testComposableCutAdvice();
 
     }
+
+    private static void testComposableCutAdvice() {
+        ApplicationContext ctx=BeanFactoryTest.getApplicationContextByXml("UpLevelBeans.xml");
+        UserInfoServiceImpl userInfoService=(UserInfoServiceImpl)ctx.getBean("proxyTargetBycomposableAdvice");
+        UserInfoServiceDelegate userInfoServiceDelegate=new UserInfoServiceDelegate();
+        userInfoServiceDelegate.setUserInfoService(userInfoService);
+        userInfoServiceDelegate.getUserInfo("1");
+    }
+
+    private static void testControllerFlowAdvice() {
+
+        ApplicationContext ctx=BeanFactoryTest.getApplicationContextByXml("UpLevelBeans.xml");
+        UserInfoServiceImpl userInfoService=(UserInfoServiceImpl)ctx.getBean("proxyTargetBycontrollerFlowAdvice");
+        UserInfoServiceDelegate userInfoServiceDelegate=new UserInfoServiceDelegate();
+        userInfoServiceDelegate.setUserInfoService(userInfoService);
+        userInfoServiceDelegate.getUserInfo("1");
+
+    }
+
 
     private static void testDynamicPointCutAdvice() {
         ApplicationContext ctx=BeanFactoryTest.getApplicationContextByXml("UpLevelBeans.xml");

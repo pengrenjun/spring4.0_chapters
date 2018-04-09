@@ -125,6 +125,46 @@
           p:proxyTargetClass="true"/>
 
 
+    <!--流程切面的配置-->
+    <!--配置前置增强 前面已经配置了 userInfoBeforAdvice-->
+    <!--配置代理的目标类 前面已经配置了一个 proxyTargetA-->
+
+    <!--配置流程切点-->
+    <bean id="controllerFlowPointCut" class="org.springframework.aop.support.ControlFlowPointcut">
+        <!--指定流程切点的类-->
+        <constructor-arg  type="java.lang.Class"  index="0" value="com.smart.SpringAop.KindsPointAdvice.UserInfoServiceDelegate"/>
+        <!--指定流程切点类的切点方法-->
+        <constructor-arg  type="java.lang.String" index="1" value="getUserInfo"/>
+    </bean>
+
+    <!--将流程切点加入到环绕增强-->
+    <bean id="controllerFlowAdvice" class="org.springframework.aop.support.DefaultPointcutAdvisor"
+          p:pointcut-ref="controllerFlowPointCut"
+          p:advice-ref="userInfoAroundAdvice"/>
+
+    <!--配置流程切点的代理类-->
+    <bean id="proxyTargetBycontrollerFlowAdvice" class="org.springframework.aop.framework.ProxyFactoryBean"
+          p:target-ref="proxyTargetA"
+          p:proxyTargetClass="true"
+          p:interceptorNames="controllerFlowAdvice"/>
+
+    <!--配置流程切点与方法名切点复合切点-->
+    <!--配置环绕增强 userInfoAroundAdvice-->
+    <!--配置代理的目标类 proxyTargetA-->
+
+    <!--配置复合切点-->
+    <bean id="userInfoComposablePointCut" class="com.smart.SpringAop.KindsPointAdvice.UserServiceComposablePointCut"/>
+    <!--配置复合切点的切面-->
+    <bean id="userInfoComposableAdvice"  class="org.springframework.aop.support.DefaultPointcutAdvisor"
+          p:advice-ref="userInfoAroundAdvice"
+          p:pointcut="#{userInfoComposablePointCut.userServicecomposablePointCut}"/><!--引用其他bean的属性-->
+    <!--配置代理类-->
+    <bean id="proxyTargetBycomposableAdvice"  class="org.springframework.aop.framework.ProxyFactoryBean"
+          p:interceptorNames="userInfoComposableAdvice"
+          p:target-ref="proxyTargetA"
+          p:proxyTargetClass="true"/>
+
+
 
 
 
