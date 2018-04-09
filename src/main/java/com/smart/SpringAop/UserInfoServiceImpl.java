@@ -1,17 +1,18 @@
 package com.smart.SpringAop;
 
 
-import com.google.common.collect.Collections2;
 import com.google.common.collect.Maps;
+import com.smart.SpringAop.InnerFunctionAdviceImplComponent.BeanSelfProxyAware;
 import com.smart.domain.User;
-import org.apache.commons.lang.ObjectUtils;
 
-import java.util.Collections;
 import java.util.Date;
 import java.util.Map;
 
-//用户信息获取实现类
-public class UserInfoServiceImpl implements UserInfoService {
+//用户信息获取实现类(实现织入自身代理类的自定义接口BeanSelfProxyAware)
+public class UserInfoServiceImpl implements UserInfoService ,BeanSelfProxyAware {
+
+    private UserInfoServiceImpl userInfoServiceImpl;
+
     @Override
     public String getUserName(String userId) {
         return getUserInfoById(userId).getUserName();
@@ -19,6 +20,10 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Override
     public String getUserIp(String userId) {
+        /*在方法内调用其他方法,需要进行处理才能对调用的方法实现增强*/
+        getUserName(userId);
+        getUserPassWord(userId);
+
         return getUserInfoById(userId).getLastIp();
     }
 
@@ -37,6 +42,13 @@ public class UserInfoServiceImpl implements UserInfoService {
             throw new NullPointerException("id:为 "+userId+"的用户在数据库中没有信息记录");
         }
         return  user;
+    }
+
+    //织入自身代理类
+    @Override
+    public void setSelfProxy(Object obj) {
+        //将当前类转换为代理类
+        this.userInfoServiceImpl=(UserInfoServiceImpl) obj;
     }
 }
 

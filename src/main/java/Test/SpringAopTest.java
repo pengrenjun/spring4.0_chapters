@@ -45,6 +45,18 @@ public class SpringAopTest {
         testBeanNameAutoProyCreator();
         //testDefaultAdvisorAutoProxyCreator();
 
+        //测试方法内调用其他方法的增强实现
+        //testFunctionInnerAdvice();
+
+    }
+
+    private static void testFunctionInnerAdvice() {
+        //环绕增强为例
+        ApplicationContext ctx=BeanFactoryTest.getApplicationContextByXml("UpLevelBeans.xml");
+        UserInfoServiceImpl proxyUserInfoServiceXml=(UserInfoServiceImpl)ctx.getBean("userInforServiceProxyC");
+        //处理前仅对userIp的获取实现了环绕增强,但对其中调用的方法没有进行增强处理
+        proxyUserInfoServiceXml.getUserIp("1");
+
     }
 
     private static void testDefaultAdvisorAutoProxyCreator() {
