@@ -2,18 +2,22 @@ package com.smart.SpringAop;
 
 
 import com.google.common.collect.Maps;
+import com.smart.SpringAop.AnnotationTest.NeedTest;
 import com.smart.SpringAop.InnerFunctionAdviceImplComponent.BeanSelfProxyAware;
+import com.smart.SpringAop.SpringAopAspectJ.BaseControllerAsprctJ;
 import com.smart.domain.User;
 
 import java.util.Date;
 import java.util.Map;
 
 //用户信息获取实现类(实现织入自身代理类的自定义接口BeanSelfProxyAware)
-public class UserInfoServiceImpl implements UserInfoService ,BeanSelfProxyAware {
+@NeedTest(needFlag = true,description = "用户信息用户信息获取接口实现")
+public class UserInfoServiceImpl extends BaseControllerAsprctJ implements UserInfoService  /*,BeanSelfProxyAware*/ {
 
     private UserInfoServiceImpl userInfoServiceImpl;
 
     @Override
+    @NeedTest(needFlag = true,description = "用户信息用户名获取",params = {"1"})
     public String getUserName(String userId) {
         return getUserInfoById(userId).getUserName();
     }
@@ -45,7 +49,7 @@ public class UserInfoServiceImpl implements UserInfoService ,BeanSelfProxyAware 
     }
 
     //织入自身代理类
-    @Override
+    //@Override
     public void setSelfProxy(Object obj) {
         //将当前类转换为代理类
         this.userInfoServiceImpl=(UserInfoServiceImpl) obj;

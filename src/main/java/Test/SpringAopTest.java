@@ -42,11 +42,11 @@ public class SpringAopTest {
         //测试流程切点和方法名切点复合的切面(只用用户的密码信息获取会被增强处理)
         //testComposableCutAdvice();
         //测试通过BeanNameAutoProyCreator配置自动代理
-        testBeanNameAutoProyCreator();
+        //testBeanNameAutoProyCreator();
         //testDefaultAdvisorAutoProxyCreator();
 
         //测试方法内调用其他方法的增强实现
-        //testFunctionInnerAdvice();
+        testFunctionInnerAdvice();
 
     }
 
