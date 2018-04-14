@@ -9,6 +9,7 @@ import org.aspectj.lang.annotation.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
 import java.util.List;
@@ -19,44 +20,28 @@ import java.util.List;
  * @CreateDate 2018-04-11 下午 4:23
  * @Version 1.0
  */
+@Component
 @Aspect
-public class BaseControllerAsprctJ implements  Serializable {
-    @Autowired
-    private GenericManager commonManager;
+public class BaseControllerAsprctJ  {
 
     private Logger logger= LoggerFactory.getLogger(this.getClass());
 
     /**
-    * @Description:    保存修改方法
+    * @Description:    用户密码信息获取方法 注意getUserPassWord(..)的写法格式 必须按照这个格式 参数放在args中
     * @param :     id
     * @exception
     * @return
     * @Version:   1.0
     */
 
-    @Before(value = "execution(* saveorsubmit(id))")
-    public  void   saveorsubmit(Object id){
+    @Before(value = "execution(* getUserPassWord(..))&& args(id)")
+    public  void   getUserPassWord(String id){
 
        if(logger.isDebugEnabled()){
-           logger.debug("用户信息数据保存修改saveorsubmit传入参数id: "+id);
+           logger.debug("用户信息数据getUserPassWord传入参数id: "+id);
        }
 
-        this.commonManager.saveOrUpdate((Serializable) id);
     }
-    /**
-    * @Description:    用户信息查找
-    * @param :     ids
-    * @exception
-    * @return
-    * @Version:   1.0
-    */
-    @After(value = "execution(* saveorsubmit(ids))")
-    public List<User> getUserInfolists(Object[] ids){
-        if(logger.isDebugEnabled()){
-            logger.debug("用户信息数据getUserInfolists传入参数ids: "+ids.toString());
 
-        }
-        return  this.commonManager.findEntityByFilter(FilterFactory.in("userId",ids));
-    }
 
 }

@@ -1,6 +1,7 @@
 package com.smart.SpringAop;
 
 
+import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
 import com.smart.SpringAop.AnnotationTest.NeedTest;
 import com.smart.SpringAop.InnerFunctionAdviceImplComponent.BeanSelfProxyAware;
@@ -12,7 +13,7 @@ import java.util.Map;
 
 //用户信息获取实现类(实现织入自身代理类的自定义接口BeanSelfProxyAware)
 @NeedTest(needFlag = true,description = "用户信息用户信息获取接口实现")
-public class UserInfoServiceImpl extends BaseControllerAsprctJ implements UserInfoService  /*,BeanSelfProxyAware*/ {
+public class UserInfoServiceImpl implements UserInfoService  /*,BeanSelfProxyAware*/ {
 
     private UserInfoServiceImpl userInfoServiceImpl;
 
@@ -53,6 +54,17 @@ public class UserInfoServiceImpl extends BaseControllerAsprctJ implements UserIn
     public void setSelfProxy(Object obj) {
         //将当前类转换为代理类
         this.userInfoServiceImpl=(UserInfoServiceImpl) obj;
+    }
+
+    //重写BaseControllerAsprctJ内的saveorsubmit方法
+
+    public void saveorsubmit(String id) {
+       this.getUserPassWord(id);
+    }
+
+    //重写BaseControllerAsprctJ内的getUserInfolists方法
+    public void getUserInfolists(String[] ids) {
+        System.out.println("参数："+ JSONObject.toJSONString(ids));
     }
 }
 
