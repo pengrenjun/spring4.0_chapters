@@ -25,7 +25,30 @@ public class SpringAopAspectJTest {
         //testSpringAspectJByXml();
 
         //测试用户信息服务中引入会员系统的引介增强
-        testAspectJIntroduceByxml();
+        //testAspectJIntroduceByxml();
+
+        //测试标注注解的@annotation切点
+        //testAspectJAnnotationByxml();
+
+        //测试通过命名切点配置切面的实现
+        testAspectJPointCut();
+    }
+
+    private static void testAspectJPointCut() {
+
+        ApplicationContext ctx= BeanFactoryTest.getApplicationContextByXml("spingAop-AspectJ.xml");
+        UserInfoService proxyUserService= (UserInfoService) ctx.getBean("userInfoService");
+        proxyUserService.getUserPassWord("1");
+        //getUserName标注了注解
+        proxyUserService.getUserIp("2");
+    }
+
+    private static void testAspectJAnnotationByxml() {
+        ApplicationContext ctx= BeanFactoryTest.getApplicationContextByXml("spingAop-AspectJ.xml");
+        UserInfoService proxyUserService= (UserInfoService) ctx.getBean("userInfoService");
+        proxyUserService.getUserPassWord("1");
+        //getUserName标注了注解
+        proxyUserService.getUserName("2");
     }
 
     private static void testAspectJIntroduceByxml() {

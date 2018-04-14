@@ -23,6 +23,10 @@
 	<!--引介增强-->
 	<bean class="com.smart.SpringAop.SpringAopAspectJ.UserInfoAddMemberCenterAspecJ"/>
 
+	<!--@annotation切点-->
+	<bean class="com.smart.SpringAop.SpringAopAspectJ.TestAspectJ"/>
+
+
 
 
 </beans>

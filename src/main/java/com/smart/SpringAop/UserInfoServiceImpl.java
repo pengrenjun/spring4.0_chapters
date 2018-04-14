@@ -24,6 +24,7 @@ public class UserInfoServiceImpl implements UserInfoService  /*,BeanSelfProxyAwa
     }
 
     @Override
+    @NeedTest(needFlag = true,description = "用户信息Ip获取方法")
     public String getUserIp(String userId) {
         /*在方法内调用其他方法,需要进行处理才能对调用的方法实现增强*/
         getUserName(userId);
@@ -33,6 +34,7 @@ public class UserInfoServiceImpl implements UserInfoService  /*,BeanSelfProxyAwa
     }
 
     @Override
+
     public String getUserPassWord(String userId) {
         return getUserInfoById(userId).getPassword();
     }
