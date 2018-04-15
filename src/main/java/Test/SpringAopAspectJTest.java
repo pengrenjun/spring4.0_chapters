@@ -30,8 +30,17 @@ public class SpringAopAspectJTest {
         //测试标注注解的@annotation切点
         //testAspectJAnnotationByxml();
 
-        //测试通过命名切点配置切面的实现
-        testAspectJPointCut();
+        //测试通过命名切点配置切面的实现 并获取连接点的信息
+        //testAspectJPointCut();
+
+        //用户信息获取绑定异常抛出
+        testUserServiceNuLLPointAspctJ();
+    }
+
+    private static void testUserServiceNuLLPointAspctJ() {
+        ApplicationContext ctx= BeanFactoryTest.getApplicationContextByXml("spingAop-AspectJ.xml");
+        UserInfoService proxyUserService= (UserInfoService) ctx.getBean("userInfoService");
+        proxyUserService.getUserPassWord("3");
     }
 
     private static void testAspectJPointCut() {
