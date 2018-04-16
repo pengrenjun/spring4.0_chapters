@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context-4.0.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
+
+
+
+ <!--定义基于Schema配置增强的方法所在的类-->
+ <bean id="userServiceAdviceMethods" class="com.smart.SpringAop.SpringAopAspectJ.AspectJSchemaAdviceMethods"/>
+ <!--定义代理的类-->
+ <bean id="userInfoService" class="com.smart.SpringAop.UserInfoServiceImpl"/>
+
+ <!--定义基于接口的增强-->
+ <bean id="userBeforeAdvisor" class="com.smart.SpringAop.UserInfoSpringAopAdvice.UserInfoBeforeAdvice"/>
+
+ <!--采用CGLIB代理-->
+   <aop:config proxy-target-class="true">
+
+    <!--用户信息获取-->
+    <aop:pointcut id="userInfoPointCut" expression="execution(* *(..)) and args(userId)"/>
+    <!--用户信息Ip命名切点-->
+    <aop:pointcut id="userInfoIpPointCut" expression="execution(* *Ip(..)) and args(userId)"/>
+    <!--用户信息密码获取切点-->
+    <aop:pointcut id="userPassWordInfoPointCut" expression="execution(* *PassWord(..)) and args(userId)"/>
+
+    <!--用户登录名称获取切点-->
+    <aop:pointcut id="userNameInfoPointCut" expression="execution(* *UserName(..)) "/>
+
+    <!--定义Advisor 将一个切点和一个增强结合-->
+    <aop:advisor advice-ref="userBeforeAdvisor" pointcut-ref="userNameInfoPointCut"/>
+
+    <!--定义一个切面-->
+     <aop:aspect ref="userServiceAdviceMethods">
+       <!--定义切点表达式(用户信息获取的 前置增强)-->
+       <!--&lt;!&ndash;匿名切点&ndash;&gt;
+       <aop:before method="getUserInfoServiceBeforeAdvice" pointcut="target(com.smart.SpringAop.UserInfoService)"/>-->
+      <aop:before method="getUserInfoServiceBeforeAdvice" pointcut-ref="userInfoIpPointCut"/>
+      <!--定义切点表达式(用户信息获取的 后置增强)-->
+      <aop:after-returning method="getUserInfoServiceAfterReAdvice" pointcut-ref="userInfoIpPointCut" returning="result" />
+      <!--定义切点表达式(用户密码获取的环绕增强)-->
+      <aop:around  method="getUserPassWord" pointcut-ref="userPassWordInfoPointCut"/>
+
+      <!--定义切点表达式(用户信息获取 异常抛出增强)-->
+      <aop:after-throwing method="userServiceNullPointAdvice" pointcut-ref="userInfoPointCut" throwing="nullpoint"/>
+
+      <!--定义切点表达式(用户信息获取 会员服务引介增强)-->
+      <aop:declare-parents types-matching="com.smart.SpringAop.UserInfoService+"
+                           implement-interface="com.smart.SpringAop.MemberCenterInterface"
+                           default-impl="com.smart.SpringAop.MemberCenterImpl"/>
+
+
+
+     </aop:aspect>
+
+   </aop:config>
+
+
+</beans>
